@@ -122,15 +122,13 @@
         </dependencies>
     </dependencyManagement>
 
-    <build>
+   <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
                 <configuration>
-                    <image>
-                        <builder>paketobuildpacks/builder-jammy-base:latest</builder>
-                    </image>
+                    <locales>es</locales>
                 </configuration>
             </plugin>
         </plugins>
