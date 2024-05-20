@@ -18,10 +18,10 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copie o JAR compilado do estágio anterior para o diretório de trabalho
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/target/*.jar ecommerce-0.0.1-SNAPSHOT.jar
 
 # Exponha a porta em que a aplicação vai rodar
 EXPOSE 8080
 
 # Defina o comando padrão para rodar a aplicação
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "ecommerce-0.0.1-SNAPSHOT.jar"]
