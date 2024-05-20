@@ -1,5 +1,5 @@
 # Use a imagem oficial do Maven para compilar a aplicação
-FROM maven:3.8.5-openjdk-17 AS build
+FROM maven:3.8.6-eclipse-temurin-17 AS build
 
 # Defina o diretório de trabalho
 WORKDIR /app
@@ -12,16 +12,16 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Use uma imagem oficial do JDK para rodar a aplicação
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jre-alpine
 
 # Defina o diretório de trabalho
 WORKDIR /app
 
 # Copie o JAR compilado do estágio anterior para o diretório de trabalho
-COPY --from=build /app/target/*.jar ecommerce-0.0.1-SNAPSHOT.jar
+COPY --from=build /app/target/*.jar app.jar
 
 # Exponha a porta em que a aplicação vai rodar
 EXPOSE 8080
 
 # Defina o comando padrão para rodar a aplicação
-CMD ["java", "-jar", "ecommerce-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "app.jar"]
