@@ -1,30 +1,27 @@
-
-# Definição de build para a imagem do Spring boot
+# Use a imagem oficial do Maven para compilar a aplicação
 FROM maven:3.8.6-eclipse-temurin-17 AS build
 
+# Defina o diretório de trabalho
 WORKDIR /app
 
-COPY mvnw .
-COPY .mvn .mvn
+# Copie o arquivo pom.xml e o código-fonte para o contêiner
 COPY pom.xml .
+COPY src ./src
 
-RUN chmod +x ./mvnw
-# Faça o download das dependencias do pom.xml
-RUN ./mvnw dependency:go-offline -B
+# Compile a aplicação
+RUN mvn clean package -DskipTests
 
-COPY src src
+# Use uma imagem oficial do JDK para rodar a aplicação
+FROM eclipse-temurin:17-jre-alpine
 
-RUN ./mvnw package -DskipTests
-RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
+# Defina o diretório de trabalho
+WORKDIR /app
 
-# Definição de produção para a imagem do Spring boot
-FROM eclipse-temurin:17-jre-alpine as production
-ARG DEPENDENCY=/app/target/dependency
+# Copie o JAR compilado do estágio anterior para o diretório de trabalho
+COPY --from=build /app/target/*.jar app.jar
 
-# Copiar as dependencias para o build artifact
-COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
-COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
+# Exponha a porta em que a aplicação vai rodar
+EXPOSE 8080
 
-# Rodar a aplicação Spring boot
-ENTRYPOINT ["java", "-jar", "app:app/lib/*","com.zprmts.tcc.ecommerce.EcommerceApplication"]
+# Defina o comando padrão para rodar a aplicação
+CMD ["java", "-jar", "app.jar"]
