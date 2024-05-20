@@ -9,7 +9,7 @@ COPY pom.xml .
 COPY src ./src
 
 # Compile a aplicação
-RUN ./mvnw clean package -DskipTests
+RUN   mvn clean package -DskipTests
 
 # Use uma imagem oficial do JDK para rodar a aplicação
 FROM eclipse-temurin:17-jre-alpine
