@@ -2,7 +2,7 @@
 FROM maven:3.8.6-eclipse-temurin-17 AS build
 
 # Defina o diretório de trabalho
-WORKDIR /ecommerce
+WORKDIR /app
 
 # Copie o arquivo pom.xml e o código-fonte para o contêiner
 COPY pom.xml .
@@ -15,7 +15,7 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jre-alpine
 
 # Defina o diretório de trabalho
-WORKDIR /ecommerce
+WORKDIR /app
 
 # Copie o JAR compilado do estágio anterior para o diretório de trabalho
 COPY --from=build /ecommerce/target/*.jar app.jar
