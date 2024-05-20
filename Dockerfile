@@ -18,7 +18,7 @@ FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
 # Copie o JAR compilado do estágio anterior para o diretório de trabalho
-COPY --from=build /ecommerce/target/*.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 
 # Exponha a porta em que a aplicação vai rodar
 EXPOSE 8080
