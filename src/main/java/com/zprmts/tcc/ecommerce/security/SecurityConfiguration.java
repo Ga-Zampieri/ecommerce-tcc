@@ -30,17 +30,31 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests((authz) -> authz
                         .antMatchers("/").permitAll()
-                        .antMatchers("/auth").permitAll()
-                        .antMatchers("/auth/usuario-logado").permitAll()
-                        .antMatchers(HttpMethod.GET, "/pessoa/**").hasAnyRole("USUARIO", "ADMIN")
-                        .antMatchers(HttpMethod.GET, "/contato/**").hasAnyRole("USUARIO", "ADMIN")
-                        .antMatchers(HttpMethod.GET, "/endereco/**").hasAnyRole("USUARIO", "ADMIN")
-                        .antMatchers(HttpMethod.GET, "/pet/**").hasAnyRole("ADMIN")
-                        .antMatchers("/endereco/**").hasAnyRole("USUARIO", "ADMIN")
-                        .antMatchers("/pessoa/**").hasAnyRole("USUARIO", "ADMIN")
-                        .antMatchers("/contato/**").hasAnyRole("USUARIO", "ADMIN")
-                        .antMatchers("/**").permitAll()//.hasRole("ADMIN")
-                        .anyRequest().permitAll()
+
+                        .antMatchers("/login").permitAll()
+                        .antMatchers("/login/reset-password").hasAnyRole("USUARIO", "ADMIN")
+
+                        .antMatchers("/register").permitAll()
+                        .antMatchers("/register/admin").hasRole("ADMIN")
+
+                        .antMatchers(HttpMethod.GET,"/perfume/**").hasAnyRole("USUARIO", "ADMIN")
+                        .antMatchers(HttpMethod.POST,"/perfume/**").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.PUT,"/perfume/**").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.DELETE,"/perfume/**").hasRole("ADMIN")
+
+                        .antMatchers(HttpMethod.POST,"/order/**").hasAnyRole("USUARIO", "ADMIN")
+                        .antMatchers(HttpMethod.PUT,"/order/**").hasAnyRole("USUARIO", "ADMIN")
+                        .antMatchers(HttpMethod.GET,"/order/logged-user").hasAnyRole("USUARIO", "ADMIN")
+                        .antMatchers(HttpMethod.GET,"/order/**").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.DELETE,"/order/**").hasRole("ADMIN")
+
+                        .antMatchers("/foto/**").hasRole("ADMIN")
+
+                        .antMatchers(HttpMethod.PUT,"/user").hasAnyRole("USUARIO", "ADMIN")
+                        .antMatchers(HttpMethod.PUT,"/user/**").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.GET,"/user/**").hasAnyRole("USUARIO", "ADMIN")
+
+                        .anyRequest().denyAll()
                 );
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
 
@@ -62,10 +76,9 @@ public class SecurityConfiguration {
             public void addCorsMappings(CorsRegistry registry) {
                 registry
                         .addMapping("/**")
-                        .allowedOrigins("https://ecommercetcc-u95b2h24.b4a.run", "http://ecommercetcc-u95b2h24.b4a.run")
+                        .allowedOrigins("*")
                         .allowedHeaders("*")
-                        .allowedMethods("*")
-                        .allowCredentials(true);
+                        .allowedMethods("*");
             }
         };
     }

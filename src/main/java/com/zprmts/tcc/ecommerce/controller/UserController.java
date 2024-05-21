@@ -1,9 +1,9 @@
 package com.zprmts.tcc.ecommerce.controller;
 
-import com.zprmts.tcc.ecommerce.dto.user.LoginResponseDTO;
 import com.zprmts.tcc.ecommerce.dto.user.UpdateUserRequest;
 import com.zprmts.tcc.ecommerce.dto.user.UserResponse;
 import com.zprmts.tcc.ecommerce.service.Impl.UserServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +16,7 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
+@Tag(name = "User")
 public class UserController {
 
     private final UserServiceImpl usuarioService;

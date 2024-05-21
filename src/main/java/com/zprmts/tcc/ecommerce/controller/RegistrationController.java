@@ -3,6 +3,7 @@ package com.zprmts.tcc.ecommerce.controller;
 import com.zprmts.tcc.ecommerce.dto.RegistrationRequest;
 import com.zprmts.tcc.ecommerce.dto.RegistrationRequestAdmin;
 import com.zprmts.tcc.ecommerce.service.Impl.AuthenticationServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/register")
+@Tag(name = "Register")
 public class RegistrationController {
 
     private final AuthenticationServiceImpl authenticationService;

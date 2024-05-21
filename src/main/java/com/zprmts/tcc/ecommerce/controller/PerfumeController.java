@@ -6,6 +6,7 @@ import com.zprmts.tcc.ecommerce.dto.perfume.PerfumeResponse;
 import com.zprmts.tcc.ecommerce.dto.perfume.PerfumeUpdate;
 import com.zprmts.tcc.ecommerce.exception.RegraDeNegocioException;
 import com.zprmts.tcc.ecommerce.service.Impl.PerfumeServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/perfume")
+@Tag(name = "Perfume")
 public class PerfumeController implements PerfumeControllerInterface {
 
     private final PerfumeServiceImpl perfumeService;

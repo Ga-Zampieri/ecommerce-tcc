@@ -7,6 +7,7 @@ import com.zprmts.tcc.ecommerce.dto.order.OrderUpdate;
 import com.zprmts.tcc.ecommerce.dto.perfume.PerfumeResponse;
 import com.zprmts.tcc.ecommerce.exception.RegraDeNegocioException;
 import com.zprmts.tcc.ecommerce.service.Impl.OrderServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/order")
+@Tag(name = "Order")
 public class OrderController implements OrderControllerInterface {
     
     private final OrderServiceImpl orderService;

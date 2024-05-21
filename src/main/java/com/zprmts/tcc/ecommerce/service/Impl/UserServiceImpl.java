@@ -1,6 +1,7 @@
 package com.zprmts.tcc.ecommerce.service.Impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zprmts.tcc.ecommerce.domain.CargoEntity;
 import com.zprmts.tcc.ecommerce.domain.Perfume;
 import com.zprmts.tcc.ecommerce.domain.User;
 import com.zprmts.tcc.ecommerce.dto.perfume.PerfumeResponse;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -66,9 +68,15 @@ public class UserServiceImpl implements UserService {
         user.setAddress(updateUserRequest.getAddress());
         user.setPhoneNumber(updateUserRequest.getPhoneNumber());
         user.setPostIndex(updateUserRequest.getPostIndex());
-
         userRepository.save(user);
-        return objectMapper.convertValue(user, UserResponse.class);
+
+        UserResponse userResponse = objectMapper.convertValue(user, UserResponse.class);
+        Set<CargoResponseDTO> cargoResponseDTOSet = new HashSet<>();
+        for (CargoEntity cargo : user.getCargos()) {
+            cargoResponseDTOSet.add(objectMapper.convertValue(cargo, CargoResponseDTO.class));
+        }
+        userResponse.setCargos(cargoResponseDTOSet);
+        return userResponse;
     }
 
     @Override
@@ -85,7 +93,14 @@ public class UserServiceImpl implements UserService {
         user.setPostIndex(updateUserRequest.getPostIndex());
 
         userRepository.save(user);
-        return objectMapper.convertValue(user, UserResponse.class);
+
+        UserResponse userResponse = objectMapper.convertValue(user, UserResponse.class);
+        Set<CargoResponseDTO> cargoResponseDTOSet = new HashSet<>();
+        for (CargoEntity cargo : user.getCargos()) {
+            cargoResponseDTOSet.add(objectMapper.convertValue(cargo, CargoResponseDTO.class));
+        }
+        userResponse.setCargos(cargoResponseDTOSet);
+        return userResponse;
     }
 
     public LoginResponseDTO getUsuarioLogado() throws RegraDeNegocioException {
@@ -103,7 +118,14 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserResponse getUserResponseLogado() throws RegraDeNegocioException {
-        return objectMapper.convertValue(getUserLogado(), UserResponse.class);
+        User user = getUserLogado();
+        UserResponse userResponse = objectMapper.convertValue(user, UserResponse.class);
+        Set<CargoResponseDTO> cargoResponseDTOSet = new HashSet<>();
+        for (CargoEntity cargo : user.getCargos()) {
+            cargoResponseDTOSet.add(objectMapper.convertValue(cargo, CargoResponseDTO.class));
+        }
+        userResponse.setCargos(cargoResponseDTOSet);
+        return userResponse;
     }
 
 
