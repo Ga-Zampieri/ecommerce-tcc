@@ -62,9 +62,10 @@ public class SecurityConfiguration {
             public void addCorsMappings(CorsRegistry registry) {
                 registry
                         .addMapping("/**")
-                        .allowedOrigins("*")
+                        .allowedOrigins("https://ecommercetcc-u95b2h24.b4a.run/", "http://ecommercetcc-u95b2h24.b4a.run/")
                         .allowedHeaders("*")
-                        .allowedMethods("*");
+                        .allowedMethods("*")
+                        .allowCredentials(true);
             }
         };
     }
