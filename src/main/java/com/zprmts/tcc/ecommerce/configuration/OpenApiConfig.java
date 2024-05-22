@@ -31,12 +31,9 @@ public class OpenApiConfig {
                                                 .scheme("bearer")
                                                 .bearerFormat("JWT")
                                 )
+                )
+                .addServersItem(new Server().url("https://ecommerce-tcc.up.railway.app"))
+                .addServersItem(new Server().url("http://localhost:8080")
                 );
     }
-    @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI().addServersItem(new Server().url("https://ecommerce-tcc.up.railway.app/"))
-                .addServersItem(new Server().url("http://localhost:8080"));
-    }
-
 }
