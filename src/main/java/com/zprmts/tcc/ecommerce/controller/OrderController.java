@@ -35,6 +35,18 @@ public class OrderController implements OrderControllerInterface {
     }
 
     @Override
+    @PutMapping("/add-perfume/{idPerfume}")
+    public ResponseEntity<OrderResponse> adicionarPerfume(@Valid Long idPerfume) throws RegraDeNegocioException {
+        return new ResponseEntity<>(orderService.adicionarPerfume(idPerfume), HttpStatus.OK);
+    }
+
+    @Override
+    @PutMapping("/finalizar-pedido")
+    public ResponseEntity<OrderResponse> finalizarPedido() throws RegraDeNegocioException {
+        return new ResponseEntity<>(orderService.finalizarPedido(), HttpStatus.OK);
+    }
+
+    @Override
     @PutMapping("/{idOrder}")
     public ResponseEntity<OrderResponse> update(@Valid @PathVariable("idOrder") Long idOrder,
                                                   @Valid @RequestBody OrderUpdate orderUpdate) throws RegraDeNegocioException {

@@ -8,6 +8,7 @@ import com.zprmts.tcc.ecommerce.dto.order.OrderRequest;
 import com.zprmts.tcc.ecommerce.dto.order.OrderResponse;
 import com.zprmts.tcc.ecommerce.dto.order.OrderUpdate;
 import com.zprmts.tcc.ecommerce.dto.perfume.PerfumeResponse;
+import com.zprmts.tcc.ecommerce.enums.StatusOrderEnum;
 import com.zprmts.tcc.ecommerce.exception.RegraDeNegocioException;
 import com.zprmts.tcc.ecommerce.repository.OrderRepository;
 import com.zprmts.tcc.ecommerce.service.OrderService;
@@ -51,6 +52,34 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public OrderResponse adicionarPerfume(Long idPerfume) throws RegraDeNegocioException {
+        User user =  usuarioService.getUserLogado();
+        Order order = orderRepository.findByStatus(StatusOrderEnum.ABERTA)
+                .orElse(new Order());
+        Double totalPrice = order.getTotalPrice();
+        Perfume perfume = perfumeService.getById(idPerfume);
+        totalPrice += perfume.getPrice();
+        order.getPerfumeList().add(perfume);
+
+        order.setTotalPrice(totalPrice);
+        order.setUser(user);
+        order = save(order);
+
+        return getOrderResponse(order);
+    }
+
+    @Override
+    public OrderResponse finalizarPedido() throws RegraDeNegocioException {
+        User user =  usuarioService.getUserLogado();
+        Order order = orderRepository.findByStatus(StatusOrderEnum.ABERTA)
+                .orElseThrow(() -> new RegraDeNegocioException("Não é possível finalizar um pedido sem ter algum pedido em aberto."));
+        order.setStatus(StatusOrderEnum.FECHADA);
+        order = save(order);
+
+        return getOrderResponse(order);
+    }
+
+    @Override
     public OrderResponse update(Long idOrder, OrderUpdate orderUpdate) throws RegraDeNegocioException {
         Order order = getById(idOrder);
         List<Long> perfumeIds = orderUpdate.getPerfumeList();
@@ -68,6 +97,8 @@ public class OrderServiceImpl implements OrderService {
 
         return getOrderResponse(order);
     }
+
+
 
     @Override
     public Order getById(Long orderId) throws RegraDeNegocioException {

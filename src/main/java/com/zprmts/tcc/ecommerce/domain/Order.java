@@ -1,6 +1,7 @@
 package com.zprmts.tcc.ecommerce.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.zprmts.tcc.ecommerce.enums.StatusOrderEnum;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -42,9 +43,13 @@ public class Order {
     )
     private List<Perfume> perfumeList;
 
+    @Column(name = "status")
+    private StatusOrderEnum status;
+
     public Order() {
         this.date = LocalDate.now();
         this.perfumeList = new ArrayList<>();
+        totalPrice = 0.0;
     }
 
     @Override

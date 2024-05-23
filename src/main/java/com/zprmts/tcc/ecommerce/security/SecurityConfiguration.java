@@ -37,7 +37,7 @@ public class SecurityConfiguration {
                         .antMatchers("/register").permitAll()
                         .antMatchers("/register/admin").hasRole("ADMIN")
 
-                        .antMatchers(HttpMethod.GET,"/perfume/**").hasAnyRole("USUARIO", "ADMIN")
+                        .antMatchers(HttpMethod.GET,"/perfume/**").permitAll()
                         .antMatchers(HttpMethod.POST,"/perfume/**").hasRole("ADMIN")
                         .antMatchers(HttpMethod.PUT,"/perfume/**").hasRole("ADMIN")
                         .antMatchers(HttpMethod.DELETE,"/perfume/**").hasRole("ADMIN")

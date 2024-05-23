@@ -1,6 +1,7 @@
 package com.zprmts.tcc.ecommerce.dto.order;
 
 import com.zprmts.tcc.ecommerce.dto.perfume.PerfumeResponse;
+import com.zprmts.tcc.ecommerce.enums.StatusOrderEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,4 +15,5 @@ public class OrderResponse {
     private Double totalPrice;
     private LocalDate date;
     private List<PerfumeResponse> perfumeList;
+    private StatusOrderEnum status;
 }

@@ -30,4 +30,8 @@ public interface OrderService {
     Order save(Order order);
 
     String delete(Long orderId) throws RegraDeNegocioException;
+
+    OrderResponse finalizarPedido() throws RegraDeNegocioException;
+
+    OrderResponse adicionarPerfume(Long idPerfume) throws RegraDeNegocioException;
 }

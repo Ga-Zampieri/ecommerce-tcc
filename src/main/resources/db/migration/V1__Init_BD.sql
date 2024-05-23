@@ -29,6 +29,7 @@ create table orders
     id           numeric,
     id_user      numeric,
     date         date,
+    status       numeric,
     total_price  decimal(11,2),
     primary key (id)
 );
@@ -97,9 +98,9 @@ CREATE TABLE USER_CARGO (
 );
 
 
-alter table if exists perfume_reviews add constraint UK_gp5u9cs9leiwnbh2rhn27e2w7 unique (reviews_id);
-alter table if exists order_item add constraint FKst073lwr6yongjsmgaravadre foreign key (id_perfume) references perfume;
-alter table if exists order_item add constraint FKst073lwr6yongjsmdasd primary key (id_order, id_perfume);
-alter table if exists orders add constraint FKst073lwr6yongjsmgarasdasd foreign key (id_user) references users (id);
-alter table if exists perfume_reviews add constraint FKq51iuslnvq3nw8teocq9y7ag8 foreign key (reviews_id) references review;
-alter table if exists perfume_reviews add constraint FK7k3k0ru1omu7xdtdamtrl276 foreign key (perfume_id) references perfume;
+alter table if exists perfume_reviews add constraint UK_REVIEW_ID unique (reviews_id);
+alter table if exists order_item add constraint FK_ORDER_ITEM_PERFUME foreign key (id_perfume) references perfume;
+alter table if exists order_item add constraint PK_ORDER_ITEM primary key (id_order, id_perfume);
+alter table if exists orders add constraint FK_ORDERS_USER foreign key (id_user) references users (id);
+alter table if exists perfume_reviews add constraint FK_PERF_REV_REVIEW foreign key (reviews_id) references review;
+alter table if exists perfume_reviews add constraint FK_PERF_REV_PERFUME foreign key (perfume_id) references perfume;

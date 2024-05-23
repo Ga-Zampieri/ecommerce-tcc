@@ -30,6 +30,27 @@ public interface OrderControllerInterface {
     @PostMapping
     ResponseEntity<OrderResponse> create(@Valid @RequestBody OrderRequest orderRequest) throws RegraDeNegocioException;
 
+    @Operation(summary = "Finalizar o pedido em aberto", description = "Finalizar o pedido em aberto")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201", description = "Pedido finalizado com sucesso!"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @PutMapping
+    ResponseEntity<OrderResponse> finalizarPedido() throws RegraDeNegocioException;
+
+    @Operation(summary = "Adicionar um perfume a ordem aberta", description = "Adiciona um perfume a ordem em aberto.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201", description = "Perfume adicionado com sucesso!"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @PutMapping
+    ResponseEntity<OrderResponse> adicionarPerfume(@Valid Long idPerfume) throws RegraDeNegocioException;
+
+
     @Operation(summary = "Atualizar uma ordem", description = "Atualiza uma ordem no banco de dados")
     @ApiResponses(
             value = {
