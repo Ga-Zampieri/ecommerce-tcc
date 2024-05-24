@@ -1,5 +1,6 @@
 package com.zprmts.tcc.ecommerce.controller.interfaces;
 
+import com.zprmts.tcc.ecommerce.dto.OrderItemResponse;
 import com.zprmts.tcc.ecommerce.dto.order.OrderRequest;
 import com.zprmts.tcc.ecommerce.dto.order.OrderResponse;
 import com.zprmts.tcc.ecommerce.dto.order.OrderUpdate;
@@ -20,15 +21,15 @@ import java.util.List;
 
 public interface OrderControllerInterface {
 
-    @Operation(summary = "Cadastrar uma Ordem", description = "Cadastra uma nova Ordem")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "201", description = "Ordem criada com sucesso!"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-            }
-    )
-    @PostMapping
-    ResponseEntity<OrderResponse> create(@Valid @RequestBody OrderRequest orderRequest) throws RegraDeNegocioException;
+//    @Operation(summary = "Cadastrar uma Ordem", description = "Cadastra uma nova Ordem")
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(responseCode = "201", description = "Ordem criada com sucesso!"),
+//                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+//            }
+//    )
+//    @PostMapping
+//    ResponseEntity<OrderResponse> create(@Valid @RequestBody OrderRequest orderRequest) throws RegraDeNegocioException;
 
     @Operation(summary = "Finalizar o pedido em aberto", description = "Finalizar o pedido em aberto")
     @ApiResponses(
@@ -50,18 +51,27 @@ public interface OrderControllerInterface {
     @PutMapping
     ResponseEntity<OrderResponse> adicionarPerfume(@Valid Long idPerfume) throws RegraDeNegocioException;
 
-
-    @Operation(summary = "Atualizar uma ordem", description = "Atualiza uma ordem no banco de dados")
+    @Operation(summary = "Remover um perfume de uma ordem aberta", description = "Remover um perfume de uma ordem aberta.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Ordem atualizada com sucesso!"),
-                    @ApiResponse(responseCode = "404", description = "Ordem não encontrada"),
+                    @ApiResponse(responseCode = "201", description = "Perfume adicionado com sucesso!"),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PutMapping("/{idOrder}")
-    ResponseEntity<OrderResponse> update(@Valid @PathVariable("idOrder") Long idOrder,
-                                                @Valid @RequestBody OrderUpdate orderUpdate) throws RegraDeNegocioException;
+    @PutMapping
+    ResponseEntity<OrderResponse> removerPerfume(@Valid Long idPerfume) throws RegraDeNegocioException;
+
+//    @Operation(summary = "Atualizar uma ordem", description = "Atualiza uma ordem no banco de dados")
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(responseCode = "200", description = "Ordem atualizada com sucesso!"),
+//                    @ApiResponse(responseCode = "404", description = "Ordem não encontrada"),
+//                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+//            }
+//    )
+//    @PutMapping("/{idOrder}")
+//    ResponseEntity<OrderResponse> update(@Valid @PathVariable("idOrder") Long idOrder,
+//                                                @Valid @RequestBody OrderUpdate orderUpdate) throws RegraDeNegocioException;
 
     @Operation(summary = "Buscar itens de uma Ordem por ID da ordem", description = "Busca todos os itens de uma Ordem")
     @ApiResponses(
@@ -72,7 +82,7 @@ public interface OrderControllerInterface {
             }
     )
     @GetMapping("/{id}/itens")
-    ResponseEntity<List<PerfumeResponse>> getOrderItemsByOrderId(@PathVariable("id") Long id) throws Exception;
+    ResponseEntity<List<OrderItemResponse>> getOrderItemsByOrderId(@PathVariable("id") Long id) throws Exception;
 
     @Operation(summary = "Buscar Ordens por usuário", description = "Busca ordens por usuário")
     @ApiResponses(

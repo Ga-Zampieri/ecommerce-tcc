@@ -44,5 +44,5 @@ public class Perfume {
             joinColumns = @JoinColumn(name = "id_perfume"),
             inverseJoinColumns = @JoinColumn(name = "id_order")
     )
-    private Set<Order> orders = new HashSet<>();
+    private Set<Order> orderItemSet = new HashSet<>();
 }

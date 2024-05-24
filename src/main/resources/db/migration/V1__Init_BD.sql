@@ -19,6 +19,7 @@ CREATE SEQUENCE SEQ_FOTOS
 
     create table order_item
 (
+    id         numeric,
     id_order   numeric,
     quantity   numeric,
     id_perfume numeric
@@ -100,7 +101,9 @@ CREATE TABLE USER_CARGO (
 
 alter table if exists perfume_reviews add constraint UK_REVIEW_ID unique (reviews_id);
 alter table if exists order_item add constraint FK_ORDER_ITEM_PERFUME foreign key (id_perfume) references perfume;
-alter table if exists order_item add constraint PK_ORDER_ITEM primary key (id_order, id_perfume);
+alter table if exists order_item add constraint FK_ORDER_ITEM_ORDER foreign key (id_order) references orders;
+alter table if exists order_item add constraint PK_ORDER_ITEM primary key (id);
+alter table if exists order_item add constraint UK_ORDER_ITEM_PERF_ORD unique (id_order, id_perfume);
 alter table if exists orders add constraint FK_ORDERS_USER foreign key (id_user) references users (id);
 alter table if exists perfume_reviews add constraint FK_PERF_REV_REVIEW foreign key (reviews_id) references review;
 alter table if exists perfume_reviews add constraint FK_PERF_REV_PERFUME foreign key (perfume_id) references perfume;

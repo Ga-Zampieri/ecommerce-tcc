@@ -1,6 +1,7 @@
 package com.zprmts.tcc.ecommerce.controller;
 
 import com.zprmts.tcc.ecommerce.controller.interfaces.OrderControllerInterface;
+import com.zprmts.tcc.ecommerce.dto.OrderItemResponse;
 import com.zprmts.tcc.ecommerce.dto.order.OrderRequest;
 import com.zprmts.tcc.ecommerce.dto.order.OrderResponse;
 import com.zprmts.tcc.ecommerce.dto.order.OrderUpdate;
@@ -28,11 +29,11 @@ public class OrderController implements OrderControllerInterface {
     
     private final OrderServiceImpl orderService;
 
-    @Override
-    @PostMapping()
-    public ResponseEntity<OrderResponse> create(@Valid @RequestBody OrderRequest orderRequest) throws RegraDeNegocioException {
-        return new ResponseEntity<>(orderService.create(orderRequest), HttpStatus.OK);
-    }
+//    @Override
+//    @PostMapping()
+//    public ResponseEntity<OrderResponse> create(@Valid @RequestBody OrderRequest orderRequest) throws RegraDeNegocioException {
+//        return new ResponseEntity<>(orderService.create(orderRequest), HttpStatus.OK);
+//    }
 
     @Override
     @PutMapping("/add-perfume/{idPerfume}")
@@ -41,17 +42,23 @@ public class OrderController implements OrderControllerInterface {
     }
 
     @Override
+    @PutMapping("/remove-perfume/{idPerfume}")
+    public ResponseEntity<OrderResponse> removerPerfume(@Valid Long idPerfume) throws RegraDeNegocioException {
+        return new ResponseEntity<>(orderService.removerPerfume(idPerfume), HttpStatus.OK);
+    }
+
+    @Override
     @PutMapping("/finalizar-pedido")
     public ResponseEntity<OrderResponse> finalizarPedido() throws RegraDeNegocioException {
         return new ResponseEntity<>(orderService.finalizarPedido(), HttpStatus.OK);
     }
 
-    @Override
-    @PutMapping("/{idOrder}")
-    public ResponseEntity<OrderResponse> update(@Valid @PathVariable("idOrder") Long idOrder,
-                                                  @Valid @RequestBody OrderUpdate orderUpdate) throws RegraDeNegocioException {
-        return new ResponseEntity<>(orderService.update(idOrder, orderUpdate), HttpStatus.OK);
-    }
+//    @Override
+//    @PutMapping("/{idOrder}")
+//    public ResponseEntity<OrderResponse> update(@Valid @PathVariable("idOrder") Long idOrder,
+//                                                  @Valid @RequestBody OrderUpdate orderUpdate) throws RegraDeNegocioException {
+//        return new ResponseEntity<>(orderService.update(idOrder, orderUpdate), HttpStatus.OK);
+//    }
 
     @Override
     @GetMapping("/{idOrder}")
@@ -61,7 +68,7 @@ public class OrderController implements OrderControllerInterface {
 
     @Override
     @GetMapping("/{id}/itens")
-    public ResponseEntity<List<PerfumeResponse>> getOrderItemsByOrderId(@PathVariable("id") Long id) throws Exception {
+    public ResponseEntity<List<OrderItemResponse>> getOrderItemsByOrderId(@PathVariable("id") Long id) throws Exception {
         return new ResponseEntity<>(orderService.getOrderItemsByOrderId(id), HttpStatus.OK);
     }
 

@@ -1,6 +1,7 @@
 package com.zprmts.tcc.ecommerce.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zprmts.tcc.ecommerce.enums.StatusOrderEnum;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,6 @@ import java.util.*;
 
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -34,21 +34,16 @@ public class Order {
     @JoinColumn(name = "id_user", referencedColumnName = "id")
     private User user;
 
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "ORDER_ITEM",
-            joinColumns = @JoinColumn(name = "ID_ORDER"),
-            inverseJoinColumns = @JoinColumn(name = "ID_PERFUME")
-    )
-    private List<Perfume> perfumeList;
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItemList;
 
     @Column(name = "status")
     private StatusOrderEnum status;
 
     public Order() {
         this.date = LocalDate.now();
-        this.perfumeList = new ArrayList<>();
+        this.orderItemList = new ArrayList<>();
         totalPrice = 0.0;
     }
 

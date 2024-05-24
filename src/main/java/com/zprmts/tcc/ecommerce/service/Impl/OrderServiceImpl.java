@@ -2,8 +2,10 @@ package com.zprmts.tcc.ecommerce.service.Impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zprmts.tcc.ecommerce.domain.Order;
+import com.zprmts.tcc.ecommerce.domain.OrderItem;
 import com.zprmts.tcc.ecommerce.domain.Perfume;
 import com.zprmts.tcc.ecommerce.domain.User;
+import com.zprmts.tcc.ecommerce.dto.OrderItemResponse;
 import com.zprmts.tcc.ecommerce.dto.order.OrderRequest;
 import com.zprmts.tcc.ecommerce.dto.order.OrderResponse;
 import com.zprmts.tcc.ecommerce.dto.order.OrderUpdate;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.zprmts.tcc.ecommerce.constants.ErrorMessage.ORDER_NOT_FOUND;
 
@@ -34,24 +37,6 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public OrderResponse create(OrderRequest orderRequest) throws RegraDeNegocioException {
-        User user =  usuarioService.getUserLogado();
-        Order order = new Order();
-        Double totalPrice = 0.0;
-        List<Long> perfumeIds = orderRequest.getPerfumeList();
-        for (Long perfumeId : perfumeIds) {
-            Perfume perfume = perfumeService.getById(perfumeId);
-            totalPrice += perfume.getPrice();
-            order.getPerfumeList().add(perfume);
-        }
-        order.setTotalPrice(totalPrice);
-        order.setUser(user);
-        order = save(order);
-
-        return getOrderResponse(order);
-    }
-
-    @Override
     public OrderResponse adicionarPerfume(Long idPerfume) throws RegraDeNegocioException {
         User user =  usuarioService.getUserLogado();
         Order order = orderRepository.findByStatus(StatusOrderEnum.ABERTA)
@@ -59,13 +44,90 @@ public class OrderServiceImpl implements OrderService {
         Double totalPrice = order.getTotalPrice();
         Perfume perfume = perfumeService.getById(idPerfume);
         totalPrice += perfume.getPrice();
-        order.getPerfumeList().add(perfume);
 
+        order = adicionarPerfumeOrderList(order, perfume);
+        order.setStatus(StatusOrderEnum.ABERTA);
         order.setTotalPrice(totalPrice);
         order.setUser(user);
         order = save(order);
 
         return getOrderResponse(order);
+    }
+
+    private Order adicionarPerfumeOrderList(Order order, Perfume perfume) {
+        List<OrderItem> orderItemList = order.getOrderItemList();
+        boolean perfumeNaOrderList = false;
+        if (Objects.isNull(orderItemList)) {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(order);
+            orderItem.setPerfume(perfume);
+            orderItem.setQuantity(orderItem.getQuantity()+1);
+            orderItemList.add(orderItem);
+        } else {
+            for (OrderItem orderItem : orderItemList) {
+                if (orderItem.getPerfume() == perfume) {
+                    perfumeNaOrderList = true;
+                    orderItem.setQuantity(orderItem.getQuantity() + 1);
+                }
+            }
+            if (!perfumeNaOrderList) {
+                OrderItem orderItem = new OrderItem();
+                orderItem.setOrder(order);
+                orderItem.setPerfume(perfume);
+                orderItem.setQuantity(orderItem.getQuantity()+1);
+                orderItemList.add(orderItem);
+            }
+        }
+        order.setOrderItemList(orderItemList);
+        order.setTotalPrice(order.getTotalPrice()+perfume.getPrice());
+        return order;
+    }
+
+    @Override
+    public OrderResponse removerPerfume(Long idPerfume) throws RegraDeNegocioException {
+        Order order = orderRepository.findByStatus(StatusOrderEnum.ABERTA)
+                .orElseThrow(() -> new RegraDeNegocioException("Não é possível remover o produto de um pedido fechado."));
+        Perfume perfume = perfumeService.getById(idPerfume);
+
+        removerPerfumeOrderList(order, perfume);
+        save(order);
+
+        return getOrderResponse(order);
+    }
+
+    private Order removerPerfumeOrderList(Order order, Perfume perfume) throws RegraDeNegocioException {
+        List<OrderItem> orderItemList = order.getOrderItemList();
+        boolean perfumeNaOrderList = false;
+        Double valorRemovido = 0.0;
+        if (Objects.isNull(orderItemList)) {
+            throw new RegraDeNegocioException("Não é possível remover um item sem termos itens no pedido.");
+        }
+        for (OrderItem orderItem : orderItemList) {
+            if (orderItem.getPerfume() == perfume) {
+                perfumeNaOrderList = true;
+                orderItem.setQuantity(orderItem.getQuantity() - 1);
+                valorRemovido += perfume.getPrice();
+            }
+        }
+        if (!perfumeNaOrderList) {
+            throw new RegraDeNegocioException("Não é possível remover um item que não está no pedido.");
+        }
+        Integer indexRemover = -1;
+        for (int i = 0; i < orderItemList.size(); i++) {
+            if (orderItemList.get(i).getQuantity() <= 0) {
+                indexRemover = i;
+            }
+        }
+
+        if (indexRemover != -1) {
+            OrderItem orderItem = orderItemList.get(indexRemover);
+            orderItem.setOrder(null);
+            orderItemList.remove(orderItem);
+            orderRepository.deleteOrderItem(orderItem.getId());
+        }
+        order.setOrderItemList(orderItemList);
+        order.setTotalPrice(order.getTotalPrice()-valorRemovido);
+        return order;
     }
 
     @Override
@@ -80,27 +142,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderResponse update(Long idOrder, OrderUpdate orderUpdate) throws RegraDeNegocioException {
-        Order order = getById(idOrder);
-        List<Long> perfumeIds = orderUpdate.getPerfumeList();
-        Double totalPrice = 0.0;
-
-        List<Perfume> perfumeListUpdate = new ArrayList<>();
-        for (Long perfumeId : perfumeIds) {
-            Perfume perfume = perfumeService.getById(perfumeId);
-            totalPrice += perfume.getPrice();
-            perfumeListUpdate.add(perfume);
-        }
-        order.setPerfumeList(perfumeListUpdate);
-        order.setTotalPrice(totalPrice);
-        order = save(order);
-
-        return getOrderResponse(order);
-    }
-
-
-
-    @Override
     public Order getById(Long orderId) throws RegraDeNegocioException {
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new RegraDeNegocioException(ORDER_NOT_FOUND));
@@ -113,15 +154,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<PerfumeResponse> getOrderItemsByOrderId(Long id) throws RegraDeNegocioException {
+    public List<OrderItemResponse> getOrderItemsByOrderId(Long id) throws RegraDeNegocioException {
         Order order = getById(id);
-        List<Perfume> perfumeList = order.getPerfumeList();
-        List<PerfumeResponse> perfumeResponseList = new ArrayList<>();
-        for (Perfume perfume : perfumeList) {
-            perfumeResponseList.add(objectMapper.convertValue(perfume, PerfumeResponse.class));
+        List<OrderItem> orderItemList = order.getOrderItemList();
+        List<OrderItemResponse> orderItemResponseList = new ArrayList<>();
+        for (OrderItem orderItem : orderItemList) {
+            orderItemResponseList.add(objectMapper.convertValue(orderItem, OrderItemResponse.class));
         }
-        return perfumeResponseList;
-
+        return orderItemResponseList;
     }
 
     @Override
@@ -158,17 +198,24 @@ public class OrderServiceImpl implements OrderService {
     public String delete(Long orderId) throws RegraDeNegocioException {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RegraDeNegocioException(ORDER_NOT_FOUND));
+        List<OrderItem> orderItemList = order.getOrderItemList();
+        for (OrderItem orderItem : orderItemList) {
+            orderItem.setOrder(null);
+            orderRepository.deleteOrderItem(orderItem.getId());
+        }
+        order.setOrderItemList(null);
         orderRepository.delete(order);
         return "Order deleted successfully";
     }
 
     private OrderResponse getOrderResponse(Order order) {
-        List<PerfumeResponse> perfumeResponseList = new ArrayList<>();
-        for (Perfume perfume : order.getPerfumeList()) {
-            perfumeResponseList.add(objectMapper.convertValue(perfume, PerfumeResponse.class));
+        List<OrderItemResponse> orderItemResponseList = new ArrayList<>();
+        List<OrderItem> orderItemList = order.getOrderItemList();
+        for (OrderItem orderItem : orderItemList) {
+            orderItemResponseList.add(objectMapper.convertValue(orderItem, OrderItemResponse.class));
         }
         OrderResponse orderResponse = objectMapper.convertValue(order, OrderResponse.class);
-        orderResponse.setPerfumeList(perfumeResponseList);
+        orderResponse.setOrderItemList(orderItemResponseList);
 
         return orderResponse;
     }

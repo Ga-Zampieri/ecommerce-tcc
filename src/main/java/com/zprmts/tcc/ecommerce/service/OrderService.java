@@ -1,6 +1,7 @@
 package com.zprmts.tcc.ecommerce.service;
 
 import com.zprmts.tcc.ecommerce.domain.Order;
+import com.zprmts.tcc.ecommerce.dto.OrderItemResponse;
 import com.zprmts.tcc.ecommerce.dto.order.OrderRequest;
 import com.zprmts.tcc.ecommerce.dto.order.OrderResponse;
 import com.zprmts.tcc.ecommerce.dto.order.OrderUpdate;
@@ -13,15 +14,11 @@ import java.util.List;
 
 public interface OrderService {
 
-    OrderResponse create(OrderRequest orderRequest) throws RegraDeNegocioException;
-
-    OrderResponse update(Long idOrder, OrderUpdate orderUpdate) throws RegraDeNegocioException;
-
     Order getById(Long orderId) throws RegraDeNegocioException;
 
     OrderResponse findById(Long orderId) throws RegraDeNegocioException;
 
-    List<PerfumeResponse> getOrderItemsByOrderId(Long orderId) throws RegraDeNegocioException;
+    List<OrderItemResponse> getOrderItemsByOrderId(Long id) throws RegraDeNegocioException;
 
     Page<OrderResponse> getUserOrders(Pageable pageable) throws RegraDeNegocioException;
 
@@ -34,4 +31,6 @@ public interface OrderService {
     OrderResponse finalizarPedido() throws RegraDeNegocioException;
 
     OrderResponse adicionarPerfume(Long idPerfume) throws RegraDeNegocioException;
+
+    OrderResponse removerPerfume(Long idPerfume) throws RegraDeNegocioException;
 }
