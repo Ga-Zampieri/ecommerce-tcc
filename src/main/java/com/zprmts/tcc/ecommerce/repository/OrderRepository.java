@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,4 +29,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             """, nativeQuery = true
     )
     Integer deleteOrderItem(@Param("id") Long id);
+
+    Page<Order> findByUser_EmailAndStatus(String email, StatusOrderEnum status, Pageable pageable);
+    Order findByUser_EmailAndStatus(String email, StatusOrderEnum status);
 }

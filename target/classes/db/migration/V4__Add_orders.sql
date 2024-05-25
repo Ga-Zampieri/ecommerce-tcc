@@ -7,7 +7,7 @@ INSERT INTO orders (id, id_user, date, total_price, status)
 INSERT INTO orders (id, id_user, date, total_price, status)
     VALUES (4, 1, '2021-04-07', 780, 1);
 INSERT INTO orders (id, id_user, date, total_price, status)
-    VALUES (5, 1, '2021-04-07', 196, 0);
+    VALUES (5, 1, '2021-04-07', 0, 0);
 
 INSERT INTO order_item (id, id_order, quantity, id_perfume) VALUES (1, 2, 1, 1);
 INSERT INTO order_item (id, id_order, quantity, id_perfume) VALUES (2, 3, 1, 2);

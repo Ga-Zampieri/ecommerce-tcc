@@ -11,4 +11,5 @@ public class UserResponse extends BaseUserResponse {
     private String address;
     private String phoneNumber;
     private String postIndex;
+    private byte[] foto;
 }

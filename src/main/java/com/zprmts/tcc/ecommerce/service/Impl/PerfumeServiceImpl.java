@@ -15,7 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,22 +32,26 @@ public class PerfumeServiceImpl implements PerfumeService {
     private final ObjectMapper objectMapper;
 
     @Override
-    public PerfumeResponse create(PerfumeRequest perfumeRequest) {
+    public PerfumeResponse create(PerfumeRequest perfumeRequest, MultipartFile foto) throws IOException {
         Perfume perfume = objectMapper.convertValue(perfumeRequest, Perfume.class);
+        if (!foto.isEmpty()) {
+            perfume.setFoto(foto.getBytes());
+        }
         save(perfume);
         PerfumeResponse perfumeResponse = objectMapper.convertValue(perfume, PerfumeResponse.class);
         return perfumeResponse;
     }
 
     @Override
-    public PerfumeResponse update(Long idPerfume, PerfumeUpdate perfumeUpdate) throws RegraDeNegocioException {
+    public PerfumeResponse update(Long idPerfume, PerfumeUpdate perfumeUpdate, MultipartFile foto) throws RegraDeNegocioException, IOException {
         Perfume perfume = getById(idPerfume);
-
         perfume.setName(perfumeUpdate.getName());
         perfume.setDescription(perfumeUpdate.getDescription());
         perfume.setPrice(perfumeUpdate.getPrice());
         perfume.setCategories(perfumeUpdate.getCategories());
-
+        if (!foto.isEmpty()) {
+            perfume.setFoto(foto.getBytes());
+        }
         perfume = save(perfume);
         PerfumeResponse perfumeResponse = objectMapper.convertValue(perfume, PerfumeResponse.class);
         return perfumeResponse;

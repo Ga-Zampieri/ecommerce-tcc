@@ -36,9 +36,8 @@ public class Perfume {
     @Column(name = "categories")
     private String categories;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "foto_id")
-    private FotoEntity foto;
+    @Column(name = "foto")
+    private byte[] foto;
 
     @Column(name = "perfume_rating")
     private Double perfumeRating;

@@ -1,6 +1,5 @@
 package com.zprmts.tcc.ecommerce.dto.perfume;
 
-import com.zprmts.tcc.ecommerce.domain.FotoEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +11,6 @@ public class PerfumeResponse {
     private String name;
     private Double price;
     private String categories;
-    private FotoEntity foto;
+    private byte[] foto;
     private Double perfumeRating;
 }

@@ -14,8 +14,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 public interface PerfumeControllerInterface {
 
@@ -27,7 +29,7 @@ public interface PerfumeControllerInterface {
             }
     )
     @PostMapping
-    public ResponseEntity<PerfumeResponse> create(@Valid @RequestBody PerfumeRequest perfumeRequest) throws RegraDeNegocioException;
+    ResponseEntity<PerfumeResponse> create(@Valid @RequestBody PerfumeRequest perfumeRequest, @RequestParam("foto") MultipartFile foto) throws RegraDeNegocioException, IOException;
 
     @Operation(summary = "Atualizar um Perfume", description = "Atualiza um Perfume")
     @ApiResponses(
@@ -38,8 +40,9 @@ public interface PerfumeControllerInterface {
             }
     )
     @PutMapping("/{idPerfume}")
-    public ResponseEntity<PerfumeResponse> update(@Valid @PathVariable("idPerfume") Long idPerfume,
-                                                  @Valid @RequestBody PerfumeUpdate perfumeUpdate) throws RegraDeNegocioException;
+    ResponseEntity<PerfumeResponse> update(@Valid @PathVariable("idPerfume") Long idPerfume,
+                                           @Valid @RequestBody PerfumeUpdate perfumeUpdate,
+                                           @RequestParam("foto") MultipartFile foto) throws RegraDeNegocioException, IOException;
 
     @Operation(summary = "Buscar um Perfume por Id", description = "Busca um Perfume por ID no banco de dados")
     @ApiResponses(

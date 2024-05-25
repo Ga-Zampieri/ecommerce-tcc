@@ -29,11 +29,6 @@ public class OrderController implements OrderControllerInterface {
     
     private final OrderServiceImpl orderService;
 
-//    @Override
-//    @PostMapping()
-//    public ResponseEntity<OrderResponse> create(@Valid @RequestBody OrderRequest orderRequest) throws RegraDeNegocioException {
-//        return new ResponseEntity<>(orderService.create(orderRequest), HttpStatus.OK);
-//    }
 
     @Override
     @PutMapping("/add-perfume/{idPerfume}")
@@ -53,13 +48,6 @@ public class OrderController implements OrderControllerInterface {
         return new ResponseEntity<>(orderService.finalizarPedido(), HttpStatus.OK);
     }
 
-//    @Override
-//    @PutMapping("/{idOrder}")
-//    public ResponseEntity<OrderResponse> update(@Valid @PathVariable("idOrder") Long idOrder,
-//                                                  @Valid @RequestBody OrderUpdate orderUpdate) throws RegraDeNegocioException {
-//        return new ResponseEntity<>(orderService.update(idOrder, orderUpdate), HttpStatus.OK);
-//    }
-
     @Override
     @GetMapping("/{idOrder}")
     public ResponseEntity<OrderResponse> getById(@PathVariable Long idOrder) throws RegraDeNegocioException {
@@ -73,9 +61,9 @@ public class OrderController implements OrderControllerInterface {
     }
 
     @Override
-    @GetMapping("/logged-user")
-    public ResponseEntity<Page<OrderResponse>> getUserOrders(@PageableDefault(size = 10) Pageable pageable) throws RegraDeNegocioException {
-        return new ResponseEntity<>(orderService.getUserOrders(pageable), HttpStatus.OK);
+    @GetMapping("/meus-pedidos")
+    public ResponseEntity<Page<OrderResponse>> meusPedidos(@PageableDefault(size = 10) Pageable pageable) throws RegraDeNegocioException {
+        return new ResponseEntity<>(orderService.meusPedidos(pageable), HttpStatus.OK);
     }
     
     @Override
@@ -89,5 +77,11 @@ public class OrderController implements OrderControllerInterface {
     public ResponseEntity<Void> delete(@PathVariable Long idOrder) throws RegraDeNegocioException {
         orderService.delete(idOrder);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    @GetMapping("/meu-carrinho")
+    public ResponseEntity<OrderResponse> meuCarrinho() throws RegraDeNegocioException {
+        return new ResponseEntity<>(orderService.meuCarrinho(), HttpStatus.OK);
     }
 }

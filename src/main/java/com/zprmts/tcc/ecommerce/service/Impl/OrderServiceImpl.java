@@ -165,16 +165,37 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<OrderResponse> getUserOrders(Pageable pageable) throws RegraDeNegocioException {
+    public Page<OrderResponse> meusPedidos(Pageable pageable) throws RegraDeNegocioException {
         User user = usuarioService.getUserLogado();
         String email = user.getEmail();
-        Page<Order> orders = orderRepository.findByUser_Email(email, pageable);
+        Page<Order> orders = orderRepository.findByUser_EmailAndStatus(email, StatusOrderEnum.FECHADA, pageable);
+        if (Objects.isNull(orders)) {
+            throw new RegraDeNegocioException("Não há pedidos");
+        }
         List<Order> orderList = orders.getContent();
         List<OrderResponse> orderResponseList = new ArrayList<>();
         for (Order order : orderList) {
             orderResponseList.add(getOrderResponse(order));
         }
         return new PageImpl<>(orderResponseList);
+    }
+
+    @Override
+    public OrderResponse meuCarrinho() throws RegraDeNegocioException {
+        User user = usuarioService.getUserLogado();
+        String email = user.getEmail();
+        Order order = orderRepository.findByUser_EmailAndStatus(email, StatusOrderEnum.ABERTA);
+        if (Objects.isNull(order)) {
+            throw new RegraDeNegocioException("Não há itens no carrinho.");
+        }
+        List<OrderItem> orderItemList = order.getOrderItemList();
+        List<OrderItemResponse> orderItemResponseList = new ArrayList<>();
+        for (OrderItem orderItem : orderItemList) {
+            orderItemResponseList.add(objectMapper.convertValue(orderItem, OrderItemResponse.class));
+        }
+        OrderResponse orderResponse = objectMapper.convertValue(order, OrderResponse.class);
+        orderResponse.setOrderItemList(orderItemResponseList);
+        return orderResponse;
     }
 
     @Override

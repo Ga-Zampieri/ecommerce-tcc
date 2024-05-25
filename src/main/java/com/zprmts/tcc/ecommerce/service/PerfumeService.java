@@ -8,14 +8,16 @@ import com.zprmts.tcc.ecommerce.exception.RegraDeNegocioException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface PerfumeService {
 
-    PerfumeResponse create(PerfumeRequest perfumeRequest) throws RegraDeNegocioException;
+    PerfumeResponse create(PerfumeRequest perfumeRequest, MultipartFile foto) throws IOException;
 
-    PerfumeResponse update(Long idPerfume, PerfumeUpdate perfumeUpdate) throws RegraDeNegocioException;
+    PerfumeResponse update(Long idPerfume, PerfumeUpdate perfumeUpdate, MultipartFile foto) throws RegraDeNegocioException, IOException;
 
     Perfume getById(Long perfumeId) throws RegraDeNegocioException;
 

@@ -4,20 +4,6 @@ create sequence order_item_seq start 12 increment 1;
 create sequence orders_seq start 6 increment 1;
 create sequence review_seq start 1 increment 1;
 
-CREATE TABLE IF NOT EXISTS FOTOS (
-    ID_FOTO     NUMERIC        NOT NULL,
-    NOME        VARCHAR(50)    NOT NULL,
-    TIPO        VARCHAR(10)    NOT NULL,
-    ARQUIVO     BYTEA           NOT NULL,
-
-    CONSTRAINT PK_FOTOS PRIMARY KEY (ID_FOTO)
-);
-
-CREATE SEQUENCE SEQ_FOTOS
-    START WITH 1
-    INCREMENT BY 1
-    NO CYCLE;
-
     create table order_item
 (
     id         numeric,
@@ -42,12 +28,11 @@ create table perfume
     categories              varchar(255),
     price                   decimal(11,2),
     name                    varchar(255),
-    foto_id                 numeric(255),
     description             varchar(255),
     perfume_rating          decimal(7,2),
+    foto                    bytea,
 
-    primary key (id_perfume),
-    foreign key (foto_id) references fotos (ID_FOTO)
+    primary key (id_perfume)
 );
 
 create table review
@@ -83,6 +68,7 @@ create table USERS
     password            varchar(255),
     phone_number        varchar(255),
     post_index          varchar(255),
+    foto                bytea,
     primary key (id)
 );
 

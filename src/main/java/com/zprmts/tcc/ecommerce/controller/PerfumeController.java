@@ -16,8 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,15 +31,16 @@ public class PerfumeController implements PerfumeControllerInterface {
 
     @Override
     @PostMapping()
-    public ResponseEntity<PerfumeResponse> create(@Valid @RequestBody PerfumeRequest perfumeRequest) throws RegraDeNegocioException {
-        return new ResponseEntity<>(perfumeService.create(perfumeRequest), HttpStatus.OK);
+    public ResponseEntity<PerfumeResponse> create(@Valid @RequestBody PerfumeRequest perfumeRequest, @RequestParam("foto") MultipartFile foto) throws RegraDeNegocioException, IOException {
+        return new ResponseEntity<>(perfumeService.create(perfumeRequest, foto), HttpStatus.OK);
     }
 
     @Override
     @PutMapping("/{idPerfume}")
     public ResponseEntity<PerfumeResponse> update(@Valid @PathVariable("idPerfume") Long idPerfume,
-                                                          @Valid @RequestBody PerfumeUpdate perfumeUpdate) throws RegraDeNegocioException {
-        return new ResponseEntity<>(perfumeService.update(idPerfume, perfumeUpdate), HttpStatus.OK);
+                                                          @Valid @RequestBody PerfumeUpdate perfumeUpdate,
+                                                          @RequestParam("foto") MultipartFile foto) throws RegraDeNegocioException, IOException {
+        return new ResponseEntity<>(perfumeService.update(idPerfume, perfumeUpdate, foto), HttpStatus.OK);
     }
 
     @Override

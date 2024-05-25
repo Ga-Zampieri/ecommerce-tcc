@@ -2,10 +2,7 @@ package com.zprmts.tcc.ecommerce.service;
 
 import com.zprmts.tcc.ecommerce.domain.Order;
 import com.zprmts.tcc.ecommerce.dto.OrderItemResponse;
-import com.zprmts.tcc.ecommerce.dto.order.OrderRequest;
 import com.zprmts.tcc.ecommerce.dto.order.OrderResponse;
-import com.zprmts.tcc.ecommerce.dto.order.OrderUpdate;
-import com.zprmts.tcc.ecommerce.dto.perfume.PerfumeResponse;
 import com.zprmts.tcc.ecommerce.exception.RegraDeNegocioException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +17,7 @@ public interface OrderService {
 
     List<OrderItemResponse> getOrderItemsByOrderId(Long id) throws RegraDeNegocioException;
 
-    Page<OrderResponse> getUserOrders(Pageable pageable) throws RegraDeNegocioException;
+    Page<OrderResponse> meusPedidos(Pageable pageable) throws RegraDeNegocioException;
 
     Page<OrderResponse> list(Pageable pageable);
 
@@ -33,4 +30,6 @@ public interface OrderService {
     OrderResponse adicionarPerfume(Long idPerfume) throws RegraDeNegocioException;
 
     OrderResponse removerPerfume(Long idPerfume) throws RegraDeNegocioException;
+
+    OrderResponse meuCarrinho() throws RegraDeNegocioException;
 }

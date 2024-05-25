@@ -53,6 +53,9 @@ public class User implements UserDetails {
     @Column(name = "active")
     private boolean active;
 
+    @Column(name = "foto")
+    private byte[] foto;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(

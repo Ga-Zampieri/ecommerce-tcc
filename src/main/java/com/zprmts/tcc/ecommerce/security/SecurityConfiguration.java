@@ -44,8 +44,7 @@ public class SecurityConfiguration {
 
                         .antMatchers(HttpMethod.POST,"/order/**").hasAnyRole("USUARIO", "ADMIN")
                         .antMatchers(HttpMethod.PUT,"/order/**").hasAnyRole("USUARIO", "ADMIN")
-                        .antMatchers(HttpMethod.GET,"/order/logged-user").hasAnyRole("USUARIO", "ADMIN")
-                        .antMatchers(HttpMethod.GET,"/order/**").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.GET,"/order/**").hasAnyRole("USUARIO", "ADMIN")
                         .antMatchers(HttpMethod.DELETE,"/order/**").hasRole("ADMIN")
 
                         .antMatchers("/foto/**").hasRole("ADMIN")

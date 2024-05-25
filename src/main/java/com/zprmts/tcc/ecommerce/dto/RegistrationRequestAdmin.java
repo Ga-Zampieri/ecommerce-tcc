@@ -35,4 +35,5 @@ public class RegistrationRequestAdmin {
     private String phoneNumber;
     @NotBlank(message = POST_INDEX_CANNOT_BE_EMPTY)
     private String postIndex;
+    private byte[] foto;
 }

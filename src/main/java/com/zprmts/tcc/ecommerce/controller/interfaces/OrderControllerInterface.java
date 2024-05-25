@@ -21,16 +21,6 @@ import java.util.List;
 
 public interface OrderControllerInterface {
 
-//    @Operation(summary = "Cadastrar uma Ordem", description = "Cadastra uma nova Ordem")
-//    @ApiResponses(
-//            value = {
-//                    @ApiResponse(responseCode = "201", description = "Ordem criada com sucesso!"),
-//                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-//            }
-//    )
-//    @PostMapping
-//    ResponseEntity<OrderResponse> create(@Valid @RequestBody OrderRequest orderRequest) throws RegraDeNegocioException;
-
     @Operation(summary = "Finalizar o pedido em aberto", description = "Finalizar o pedido em aberto")
     @ApiResponses(
             value = {
@@ -61,18 +51,6 @@ public interface OrderControllerInterface {
     @PutMapping
     ResponseEntity<OrderResponse> removerPerfume(@Valid Long idPerfume) throws RegraDeNegocioException;
 
-//    @Operation(summary = "Atualizar uma ordem", description = "Atualiza uma ordem no banco de dados")
-//    @ApiResponses(
-//            value = {
-//                    @ApiResponse(responseCode = "200", description = "Ordem atualizada com sucesso!"),
-//                    @ApiResponse(responseCode = "404", description = "Ordem não encontrada"),
-//                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-//            }
-//    )
-//    @PutMapping("/{idOrder}")
-//    ResponseEntity<OrderResponse> update(@Valid @PathVariable("idOrder") Long idOrder,
-//                                                @Valid @RequestBody OrderUpdate orderUpdate) throws RegraDeNegocioException;
-
     @Operation(summary = "Buscar itens de uma Ordem por ID da ordem", description = "Busca todos os itens de uma Ordem")
     @ApiResponses(
             value = {
@@ -93,7 +71,18 @@ public interface OrderControllerInterface {
             }
     )
     @GetMapping
-    ResponseEntity<Page<OrderResponse>> getUserOrders(@PageableDefault(size = 10) Pageable pageable) throws RegraDeNegocioException;
+    ResponseEntity<Page<OrderResponse>> meusPedidos(@PageableDefault(size = 10) Pageable pageable) throws RegraDeNegocioException;
+
+    @Operation(summary = "Buscar carrinho por usuario logado", description = "Buscar carrinho por usuario logado")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Carrinho encontrado com sucesso!"),
+                    @ApiResponse(responseCode = "404", description = "Carrinho não encontradas"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @GetMapping
+    ResponseEntity<OrderResponse> meuCarrinho() throws RegraDeNegocioException;
 
     @Operation(summary = "Buscar todas as ordens", description = "Busca todas as ordens")
     @ApiResponses(
