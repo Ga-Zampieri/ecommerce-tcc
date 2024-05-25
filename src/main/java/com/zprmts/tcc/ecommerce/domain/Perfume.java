@@ -1,11 +1,14 @@
 package com.zprmts.tcc.ecommerce.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -37,6 +40,9 @@ public class Perfume {
     @JoinColumn(name = "foto_id")
     private FotoEntity foto;
 
+    @Column(name = "perfume_rating")
+    private Double perfumeRating;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -45,4 +51,8 @@ public class Perfume {
             inverseJoinColumns = @JoinColumn(name = "id_order")
     )
     private Set<Order> orderItemSet = new HashSet<>();
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "perfume", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviewList = new ArrayList<>();
 }

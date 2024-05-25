@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OrderItemResponse {
+    private Long id;
     private Long quantity;
     private Perfume perfume;
 }

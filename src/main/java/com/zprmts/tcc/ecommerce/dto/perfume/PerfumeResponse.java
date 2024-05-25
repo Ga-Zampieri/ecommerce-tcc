@@ -7,9 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PerfumeResponse {
+    private Long   id;
     private String description;
     private String name;
     private Double price;
     private String categories;
     private FotoEntity foto;
+    private Double perfumeRating;
 }

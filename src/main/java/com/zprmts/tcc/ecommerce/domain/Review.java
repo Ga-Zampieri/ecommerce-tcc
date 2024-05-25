@@ -1,5 +1,6 @@
 package com.zprmts.tcc.ecommerce.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,13 +11,13 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "review")
 public class Review {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_seq")
+    @SequenceGenerator(name = "review_seq", sequenceName = "review_seq", allocationSize = 1)
     @Column(name = "id")
     private Long id;
 
@@ -27,10 +28,15 @@ public class Review {
     private String message;
 
     @Column(name = "rating")
-    private Integer rating;
+    private Double rating;
 
     @Column(name = "date")
     private LocalDate date;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_perfume", referencedColumnName = "id_perfume")
+    private Perfume perfume;
 
     public Review() {
         this.date = LocalDate.now();

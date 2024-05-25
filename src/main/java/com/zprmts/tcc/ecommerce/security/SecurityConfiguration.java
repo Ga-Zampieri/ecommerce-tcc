@@ -54,6 +54,11 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.PUT,"/user/**").hasRole("ADMIN")
                         .antMatchers(HttpMethod.GET,"/user/**").hasAnyRole("USUARIO", "ADMIN")
 
+                        .antMatchers(HttpMethod.POST,"/review/**").hasAnyRole("USUARIO", "ADMIN")
+                        .antMatchers(HttpMethod.GET,"/review/**").hasAnyRole("USUARIO", "ADMIN")
+                        .antMatchers(HttpMethod.DELETE,"/review/**").hasAnyRole("ADMIN")
+
+
                         .anyRequest().denyAll()
                 );
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);

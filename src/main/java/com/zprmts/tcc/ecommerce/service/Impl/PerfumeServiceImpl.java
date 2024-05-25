@@ -91,6 +91,7 @@ public class PerfumeServiceImpl implements PerfumeService {
     public String delete(Long perfumeId) throws RegraDeNegocioException {
         Perfume perfume = perfumeRepository.findById(perfumeId)
                 .orElseThrow(() -> new RegraDeNegocioException(PERFUME_NOT_FOUND));
+        perfumeRepository.deleteReviewsPerfume(perfumeId);
         perfumeRepository.delete(perfume);
         return "Perfume deleted successfully";
     }

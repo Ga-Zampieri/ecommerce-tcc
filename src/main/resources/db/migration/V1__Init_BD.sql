@@ -2,6 +2,7 @@ create sequence perfume_id_seq start 14 increment 1;
 create sequence users_id_seq start 2 increment 1;
 create sequence order_item_seq start 12 increment 1;
 create sequence orders_seq start 6 increment 1;
+create sequence review_seq start 1 increment 1;
 
 CREATE TABLE IF NOT EXISTS FOTOS (
     ID_FOTO     NUMERIC        NOT NULL,
@@ -43,24 +44,20 @@ create table perfume
     name                    varchar(255),
     foto_id                 numeric(255),
     description             varchar(255),
+    perfume_rating          decimal(7,2),
 
     primary key (id_perfume),
     foreign key (foto_id) references fotos (ID_FOTO)
 );
 
-create table perfume_reviews
-(
-    perfume_id numeric not null,
-    reviews_id numeric not null
-);
-
 create table review
 (
     id      numeric,
+    id_perfume numeric,
     author  varchar(255),
     date    date,
     message varchar(255),
-    rating  numeric,
+    rating  decimal(7,2),
     primary key (id)
 );
 
@@ -99,11 +96,9 @@ CREATE TABLE USER_CARGO (
 );
 
 
-alter table if exists perfume_reviews add constraint UK_REVIEW_ID unique (reviews_id);
 alter table if exists order_item add constraint FK_ORDER_ITEM_PERFUME foreign key (id_perfume) references perfume;
 alter table if exists order_item add constraint FK_ORDER_ITEM_ORDER foreign key (id_order) references orders;
 alter table if exists order_item add constraint PK_ORDER_ITEM primary key (id);
 alter table if exists order_item add constraint UK_ORDER_ITEM_PERF_ORD unique (id_order, id_perfume);
 alter table if exists orders add constraint FK_ORDERS_USER foreign key (id_user) references users (id);
-alter table if exists perfume_reviews add constraint FK_PERF_REV_REVIEW foreign key (reviews_id) references review;
-alter table if exists perfume_reviews add constraint FK_PERF_REV_PERFUME foreign key (perfume_id) references perfume;
+alter table if exists review add constraint FK_REVIEW_PERFUME foreign key (id_perfume) references perfume (id_perfume);

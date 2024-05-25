@@ -9,6 +9,6 @@ public class ReviewResponse {
     private Long id;
     private String author;
     private String message;
-    private Integer rating;
+    private Double rating;
     private LocalDate date;
 }
