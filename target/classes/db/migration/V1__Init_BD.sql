@@ -1,3 +1,5 @@
+set search_path = "public";
+
 create sequence perfume_id_seq start 14 increment 1;
 create sequence users_id_seq start 2 increment 1;
 create sequence order_item_seq start 12 increment 1;
