@@ -1,6 +1,8 @@
 package com.zprmts.tcc.ecommerce.service.Impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.mail.iap.ByteArray;
+import com.sun.mail.util.BASE64EncoderStream;
 import com.zprmts.tcc.ecommerce.domain.Perfume;
 import com.zprmts.tcc.ecommerce.dto.perfume.PerfumeRequest;
 import com.zprmts.tcc.ecommerce.dto.perfume.PerfumeResponse;
@@ -42,11 +44,15 @@ public class PerfumeServiceImpl implements PerfumeService {
     @Override
     public PerfumeResponse update(Long idPerfume, PerfumeUpdate perfumeUpdate) throws RegraDeNegocioException {
         Perfume perfume = getById(idPerfume);
+        byte[] byteArray = null;
+        if (!perfumeUpdate.getFoto().isEmpty()) {
+            byteArray = perfumeUpdate.getFoto().getBytes();
+        }
         perfume.setName(perfumeUpdate.getName());
         perfume.setDescription(perfumeUpdate.getDescription());
         perfume.setPrice(perfumeUpdate.getPrice());
         perfume.setCategories(perfumeUpdate.getCategories());
-        perfume.setFoto(perfumeUpdate.getFoto());
+        perfume.setFoto(byteArray);
         perfume = save(perfume);
         PerfumeResponse perfumeResponse = objectMapper.convertValue(perfume, PerfumeResponse.class);
         return perfumeResponse;

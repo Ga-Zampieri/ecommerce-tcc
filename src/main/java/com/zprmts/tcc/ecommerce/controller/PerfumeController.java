@@ -30,14 +30,14 @@ public class PerfumeController implements PerfumeControllerInterface {
 
     private final PerfumeServiceImpl perfumeService;
     @Override
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping()
     public ResponseEntity<PerfumeResponse> create(@Valid @RequestBody PerfumeRequest perfumeRequest) {
         return new ResponseEntity<>(perfumeService.create(perfumeRequest), HttpStatus.OK);
     }
 
     @Override
-    @PutMapping(name = "/{idPerfume}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PerfumeResponse> update(@Valid @PathVariable("idPerfume") Long idPerfume,
+    @PutMapping("/{idPerfume}")
+    public ResponseEntity<PerfumeResponse> update(@PathVariable Long idPerfume,
                                                           @Valid @RequestBody PerfumeUpdate perfumeUpdate) throws RegraDeNegocioException {
         return new ResponseEntity<>(perfumeService.update(idPerfume, perfumeUpdate), HttpStatus.OK);
     }
