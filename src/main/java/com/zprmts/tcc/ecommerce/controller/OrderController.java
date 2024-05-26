@@ -2,10 +2,7 @@ package com.zprmts.tcc.ecommerce.controller;
 
 import com.zprmts.tcc.ecommerce.controller.interfaces.OrderControllerInterface;
 import com.zprmts.tcc.ecommerce.dto.OrderItemResponse;
-import com.zprmts.tcc.ecommerce.dto.order.OrderRequest;
 import com.zprmts.tcc.ecommerce.dto.order.OrderResponse;
-import com.zprmts.tcc.ecommerce.dto.order.OrderUpdate;
-import com.zprmts.tcc.ecommerce.dto.perfume.PerfumeResponse;
 import com.zprmts.tcc.ecommerce.exception.RegraDeNegocioException;
 import com.zprmts.tcc.ecommerce.service.Impl.OrderServiceImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,13 +29,13 @@ public class OrderController implements OrderControllerInterface {
 
     @Override
     @PutMapping("/add-perfume/{idPerfume}")
-    public ResponseEntity<OrderResponse> adicionarPerfume(@Valid Long idPerfume) throws RegraDeNegocioException {
+    public ResponseEntity<OrderResponse> adicionarPerfume(@Valid @PathVariable Long idPerfume) throws RegraDeNegocioException {
         return new ResponseEntity<>(orderService.adicionarPerfume(idPerfume), HttpStatus.OK);
     }
 
     @Override
     @PutMapping("/remove-perfume/{idPerfume}")
-    public ResponseEntity<OrderResponse> removerPerfume(@Valid Long idPerfume) throws RegraDeNegocioException {
+    public ResponseEntity<OrderResponse> removerPerfume(@Valid @PathVariable Long idPerfume) throws RegraDeNegocioException {
         return new ResponseEntity<>(orderService.removerPerfume(idPerfume), HttpStatus.OK);
     }
 

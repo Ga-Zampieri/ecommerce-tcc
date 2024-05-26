@@ -24,7 +24,7 @@ public class OrderItem {
     private Long quantity;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = false)
     @JoinColumn(name = "id_perfume", referencedColumnName = "id_perfume")
     private Perfume perfume;
 

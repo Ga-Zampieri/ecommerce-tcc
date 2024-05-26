@@ -6,12 +6,10 @@ import com.zprmts.tcc.ecommerce.domain.OrderItem;
 import com.zprmts.tcc.ecommerce.domain.Perfume;
 import com.zprmts.tcc.ecommerce.domain.User;
 import com.zprmts.tcc.ecommerce.dto.OrderItemResponse;
-import com.zprmts.tcc.ecommerce.dto.order.OrderRequest;
 import com.zprmts.tcc.ecommerce.dto.order.OrderResponse;
-import com.zprmts.tcc.ecommerce.dto.order.OrderUpdate;
-import com.zprmts.tcc.ecommerce.dto.perfume.PerfumeResponse;
 import com.zprmts.tcc.ecommerce.enums.StatusOrderEnum;
 import com.zprmts.tcc.ecommerce.exception.RegraDeNegocioException;
+import com.zprmts.tcc.ecommerce.repository.OrderItemRepository;
 import com.zprmts.tcc.ecommerce.repository.OrderRepository;
 import com.zprmts.tcc.ecommerce.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +18,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,6 +30,7 @@ import static com.zprmts.tcc.ecommerce.constants.ErrorMessage.ORDER_NOT_FOUND;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
     private final ObjectMapper objectMapper;
     private final UserServiceImpl usuarioService;
     private final PerfumeServiceImpl perfumeService;
@@ -83,6 +83,7 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
+    @Transactional
     @Override
     public OrderResponse removerPerfume(Long idPerfume) throws RegraDeNegocioException {
         Order order = orderRepository.findByStatus(StatusOrderEnum.ABERTA)
@@ -91,7 +92,6 @@ public class OrderServiceImpl implements OrderService {
 
         removerPerfumeOrderList(order, perfume);
         save(order);
-
         return getOrderResponse(order);
     }
 
@@ -121,9 +121,8 @@ public class OrderServiceImpl implements OrderService {
 
         if (indexRemover != -1) {
             OrderItem orderItem = orderItemList.get(indexRemover);
-            orderItem.setOrder(null);
             orderItemList.remove(orderItem);
-            orderRepository.deleteOrderItem(orderItem.getId());
+            orderItem.setPerfume(null);
         }
         order.setOrderItemList(orderItemList);
         order.setTotalPrice(order.getTotalPrice()-valorRemovido);
@@ -215,6 +214,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
+    @Transactional
     @Override
     public String delete(Long orderId) throws RegraDeNegocioException {
         Order order = orderRepository.findById(orderId)
@@ -222,7 +222,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItem> orderItemList = order.getOrderItemList();
         for (OrderItem orderItem : orderItemList) {
             orderItem.setOrder(null);
-            orderRepository.deleteOrderItem(orderItem.getId());
+            orderItemRepository.deleteOrderItem(orderItem.getId());
         }
         order.setOrderItemList(null);
         orderRepository.delete(order);

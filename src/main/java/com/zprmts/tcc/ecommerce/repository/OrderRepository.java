@@ -19,17 +19,7 @@ import java.util.Optional;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<Order> findByUser_Email(String email, Pageable pageable);
-
     Optional<Order> findByStatus(StatusOrderEnum status);
-
-    @Transactional
-    @Modifying
-    @Query(value = """
-            DELETE FROM ORDER_ITEM WHERE ID = :id
-            """, nativeQuery = true
-    )
-    Integer deleteOrderItem(@Param("id") Long id);
-
     Page<Order> findByUser_EmailAndStatus(String email, StatusOrderEnum status, Pageable pageable);
     Order findByUser_EmailAndStatus(String email, StatusOrderEnum status);
 }
