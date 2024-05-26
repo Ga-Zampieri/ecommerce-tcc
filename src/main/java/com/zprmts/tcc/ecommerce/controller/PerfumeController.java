@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -28,19 +29,17 @@ import java.io.IOException;
 public class PerfumeController implements PerfumeControllerInterface {
 
     private final PerfumeServiceImpl perfumeService;
-
     @Override
-    @PostMapping()
-    public ResponseEntity<PerfumeResponse> create(@Valid @RequestBody PerfumeRequest perfumeRequest, @RequestParam("foto") MultipartFile foto) throws RegraDeNegocioException, IOException {
-        return new ResponseEntity<>(perfumeService.create(perfumeRequest, foto), HttpStatus.OK);
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PerfumeResponse> create(@Valid @RequestBody PerfumeRequest perfumeRequest) {
+        return new ResponseEntity<>(perfumeService.create(perfumeRequest), HttpStatus.OK);
     }
 
     @Override
-    @PutMapping("/{idPerfume}")
+    @PutMapping(name = "/{idPerfume}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PerfumeResponse> update(@Valid @PathVariable("idPerfume") Long idPerfume,
-                                                          @Valid @RequestBody PerfumeUpdate perfumeUpdate,
-                                                          @RequestParam("foto") MultipartFile foto) throws RegraDeNegocioException, IOException {
-        return new ResponseEntity<>(perfumeService.update(idPerfume, perfumeUpdate, foto), HttpStatus.OK);
+                                                          @Valid @RequestBody PerfumeUpdate perfumeUpdate) throws RegraDeNegocioException {
+        return new ResponseEntity<>(perfumeService.update(idPerfume, perfumeUpdate), HttpStatus.OK);
     }
 
     @Override

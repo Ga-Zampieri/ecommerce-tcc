@@ -27,4 +27,6 @@ public class PerfumeUpdate {
     @NotBlank(message = FILL_IN_THE_INPUT_FIELD)
     @Length(max = 255)
     private String categories;
+
+    private String foto;
 }

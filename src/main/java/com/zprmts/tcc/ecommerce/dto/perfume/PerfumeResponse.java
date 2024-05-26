@@ -11,6 +11,6 @@ public class PerfumeResponse {
     private String name;
     private Double price;
     private String categories;
-    private byte[] foto;
+    private String foto;
     private Double perfumeRating;
 }

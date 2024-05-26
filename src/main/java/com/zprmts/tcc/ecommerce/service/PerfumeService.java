@@ -15,9 +15,9 @@ import java.util.List;
 
 public interface PerfumeService {
 
-    PerfumeResponse create(PerfumeRequest perfumeRequest, MultipartFile foto) throws IOException;
+    PerfumeResponse create(PerfumeRequest perfumeRequest);
 
-    PerfumeResponse update(Long idPerfume, PerfumeUpdate perfumeUpdate, MultipartFile foto) throws RegraDeNegocioException, IOException;
+    PerfumeResponse update(Long idPerfume, PerfumeUpdate perfumeUpdate) throws RegraDeNegocioException;
 
     Perfume getById(Long perfumeId) throws RegraDeNegocioException;
 

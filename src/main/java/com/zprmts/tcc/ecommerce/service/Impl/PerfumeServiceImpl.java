@@ -32,26 +32,21 @@ public class PerfumeServiceImpl implements PerfumeService {
     private final ObjectMapper objectMapper;
 
     @Override
-    public PerfumeResponse create(PerfumeRequest perfumeRequest, MultipartFile foto) throws IOException {
+    public PerfumeResponse create(PerfumeRequest perfumeRequest) {
         Perfume perfume = objectMapper.convertValue(perfumeRequest, Perfume.class);
-        if (!foto.isEmpty()) {
-            perfume.setFoto(foto.getBytes());
-        }
         save(perfume);
         PerfumeResponse perfumeResponse = objectMapper.convertValue(perfume, PerfumeResponse.class);
         return perfumeResponse;
     }
 
     @Override
-    public PerfumeResponse update(Long idPerfume, PerfumeUpdate perfumeUpdate, MultipartFile foto) throws RegraDeNegocioException, IOException {
+    public PerfumeResponse update(Long idPerfume, PerfumeUpdate perfumeUpdate) throws RegraDeNegocioException {
         Perfume perfume = getById(idPerfume);
         perfume.setName(perfumeUpdate.getName());
         perfume.setDescription(perfumeUpdate.getDescription());
         perfume.setPrice(perfumeUpdate.getPrice());
         perfume.setCategories(perfumeUpdate.getCategories());
-        if (!foto.isEmpty()) {
-            perfume.setFoto(foto.getBytes());
-        }
+        perfume.setFoto(perfumeUpdate.getFoto());
         perfume = save(perfume);
         PerfumeResponse perfumeResponse = objectMapper.convertValue(perfume, PerfumeResponse.class);
         return perfumeResponse;

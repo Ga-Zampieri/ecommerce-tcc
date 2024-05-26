@@ -29,7 +29,7 @@ public interface PerfumeControllerInterface {
             }
     )
     @PostMapping
-    ResponseEntity<PerfumeResponse> create(@Valid @RequestBody PerfumeRequest perfumeRequest, @RequestParam("foto") MultipartFile foto) throws RegraDeNegocioException, IOException;
+    ResponseEntity<PerfumeResponse> create(@Valid @RequestBody PerfumeRequest perfumeRequest);
 
     @Operation(summary = "Atualizar um Perfume", description = "Atualiza um Perfume")
     @ApiResponses(
@@ -41,8 +41,7 @@ public interface PerfumeControllerInterface {
     )
     @PutMapping("/{idPerfume}")
     ResponseEntity<PerfumeResponse> update(@Valid @PathVariable("idPerfume") Long idPerfume,
-                                           @Valid @RequestBody PerfumeUpdate perfumeUpdate,
-                                           @RequestParam("foto") MultipartFile foto) throws RegraDeNegocioException, IOException;
+                                           @Valid @RequestBody PerfumeUpdate perfumeUpdate) throws RegraDeNegocioException;
 
     @Operation(summary = "Buscar um Perfume por Id", description = "Busca um Perfume por ID no banco de dados")
     @ApiResponses(

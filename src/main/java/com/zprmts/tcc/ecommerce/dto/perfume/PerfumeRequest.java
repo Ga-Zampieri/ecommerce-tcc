@@ -14,7 +14,7 @@ import static com.zprmts.tcc.ecommerce.constants.ErrorMessage.FILL_IN_THE_INPUT_
 public class PerfumeRequest {
 
     @NotNull(message = FILL_IN_THE_INPUT_FIELD)
-    @Schema(description = "Campo para a descrição da edição.", example = "13ª Edição do Vem Ser, realizada em 2024 no início do ano.")
+    @Schema(description = "Campo para a descrição do perfume.", example = "Descrição Perfume")
     private Integer price;
 
     @NotBlank(message = FILL_IN_THE_INPUT_FIELD)
@@ -28,4 +28,6 @@ public class PerfumeRequest {
     @NotBlank(message = FILL_IN_THE_INPUT_FIELD)
     @Length(max = 255)
     private String categories;
+
+    private String foto;
 }
