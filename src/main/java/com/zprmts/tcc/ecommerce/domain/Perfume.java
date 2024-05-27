@@ -2,6 +2,7 @@ package com.zprmts.tcc.ecommerce.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.zprmts.tcc.ecommerce.enums.StatusPerfumeEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,6 +43,9 @@ public class Perfume {
     @Column(name = "perfume_rating")
     private Double perfumeRating;
 
+    @Column(name = "ativo")
+    private StatusPerfumeEnum ativo;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -54,4 +58,8 @@ public class Perfume {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "perfume", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviewList = new ArrayList<>();
+
+    public Perfume() {
+        this.ativo = StatusPerfumeEnum.ATIVO;
+    }
 }

@@ -13,7 +13,7 @@ import static com.zprmts.tcc.ecommerce.constants.ErrorMessage.FILL_IN_THE_INPUT_
 public class PerfumeUpdate {
 
     @NotNull(message = FILL_IN_THE_INPUT_FIELD)
-    @Schema(description = "Campo para a descrição da edição.", example = "13ª Edição do Vem Ser, realizada em 2024 no início do ano.")
+    @Schema(description = "Campo para a descrição do perfume.", example = "Descricao do perfume.")
     private Double price;
 
     @NotBlank(message = FILL_IN_THE_INPUT_FIELD)

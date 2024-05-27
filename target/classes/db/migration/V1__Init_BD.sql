@@ -32,6 +32,7 @@ create table perfume
     name                    varchar(255),
     description             varchar(255),
     perfume_rating          decimal(7,2),
+    ativo                   numeric,
     foto                    bytea,
 
     primary key (id_perfume)

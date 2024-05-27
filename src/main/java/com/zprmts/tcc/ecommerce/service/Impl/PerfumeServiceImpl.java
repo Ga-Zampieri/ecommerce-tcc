@@ -7,6 +7,7 @@ import com.zprmts.tcc.ecommerce.domain.Perfume;
 import com.zprmts.tcc.ecommerce.dto.perfume.PerfumeRequest;
 import com.zprmts.tcc.ecommerce.dto.perfume.PerfumeResponse;
 import com.zprmts.tcc.ecommerce.dto.perfume.PerfumeUpdate;
+import com.zprmts.tcc.ecommerce.enums.StatusPerfumeEnum;
 import com.zprmts.tcc.ecommerce.exception.RegraDeNegocioException;
 import com.zprmts.tcc.ecommerce.repository.PerfumeRepository;
 import com.zprmts.tcc.ecommerce.repository.specification.PerfumeSpecifications;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.zprmts.tcc.ecommerce.constants.ErrorMessage.PERFUME_NOT_FOUND;
@@ -44,15 +46,14 @@ public class PerfumeServiceImpl implements PerfumeService {
     @Override
     public PerfumeResponse update(Long idPerfume, PerfumeUpdate perfumeUpdate) throws RegraDeNegocioException {
         Perfume perfume = getById(idPerfume);
-        byte[] byteArray = null;
-        if (!perfumeUpdate.getFoto().isEmpty()) {
-            byteArray = perfumeUpdate.getFoto().getBytes();
+        Perfume perfumeUpdateGetFoto = objectMapper.convertValue(perfumeUpdate, Perfume.class);
+        if (!Objects.isNull(perfumeUpdateGetFoto.getFoto())) {
+            perfume.setFoto(perfumeUpdateGetFoto.getFoto());
         }
         perfume.setName(perfumeUpdate.getName());
         perfume.setDescription(perfumeUpdate.getDescription());
         perfume.setPrice(perfumeUpdate.getPrice());
         perfume.setCategories(perfumeUpdate.getCategories());
-        perfume.setFoto(byteArray);
         perfume = save(perfume);
         PerfumeResponse perfumeResponse = objectMapper.convertValue(perfume, PerfumeResponse.class);
         return perfumeResponse;
@@ -82,8 +83,8 @@ public class PerfumeServiceImpl implements PerfumeService {
                                       @Nullable String name,
                                       @Nullable String description,
                                       @Nullable String categories) {
-
-        Specification spec = perfumeSpecifications.builderSpecification(idPerfume, name, description, categories);
+        StatusPerfumeEnum statusPerfumeEnum = StatusPerfumeEnum.ATIVO;
+        Specification spec = perfumeSpecifications.builderSpecification(idPerfume, name, description, categories, statusPerfumeEnum);
         Page<Perfume> perfumes = perfumeRepository.findAll(spec, pageable);
 
         return perfumes.map(perfume -> objectMapper.convertValue(perfume, PerfumeResponse.class));
@@ -98,8 +99,8 @@ public class PerfumeServiceImpl implements PerfumeService {
     public String delete(Long perfumeId) throws RegraDeNegocioException {
         Perfume perfume = perfumeRepository.findById(perfumeId)
                 .orElseThrow(() -> new RegraDeNegocioException(PERFUME_NOT_FOUND));
-        perfumeRepository.deleteReviewsPerfume(perfumeId);
-        perfumeRepository.delete(perfume);
+        perfume.setAtivo(StatusPerfumeEnum.INATIVO);
+        save(perfume);
         return "Perfume deleted successfully";
     }
 }

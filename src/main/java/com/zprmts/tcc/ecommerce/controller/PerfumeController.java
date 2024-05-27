@@ -44,7 +44,7 @@ public class PerfumeController implements PerfumeControllerInterface {
 
     @Override
     @GetMapping("/listar")
-    public ResponseEntity<Page<PerfumeResponse>> list(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
+    public ResponseEntity<Page<PerfumeResponse>> list(@PageableDefault(page = 0, size = 10) Pageable pageable,
                                                 @RequestParam @Nullable Long idPerfume,
                                                 @RequestParam @Nullable String name,
                                                 @RequestParam @Nullable String description,
