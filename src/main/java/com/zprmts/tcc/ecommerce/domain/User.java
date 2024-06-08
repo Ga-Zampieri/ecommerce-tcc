@@ -50,8 +50,8 @@ public class User implements UserDetails {
     @Column(name = "post_index")
     private String postIndex;
 
-    @Column(name = "active")
-    private boolean active;
+    @Column(name = "ativo")
+    private String ativo;
 
     @Column(name = "foto")
     private byte[] foto;

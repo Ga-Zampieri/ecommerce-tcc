@@ -3,6 +3,7 @@ package com.zprmts.tcc.ecommerce.controller;
 import com.zprmts.tcc.ecommerce.domain.User;
 import com.zprmts.tcc.ecommerce.dto.PasswordResetRequest;
 import com.zprmts.tcc.ecommerce.dto.user.LoginRequestDTO;
+import com.zprmts.tcc.ecommerce.exception.RegraDeNegocioException;
 import com.zprmts.tcc.ecommerce.security.TokenService;
 import com.zprmts.tcc.ecommerce.service.Impl.AuthenticationServiceImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,7 +32,7 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping
-    public String auth(@RequestBody @Valid LoginRequestDTO loginRequestDTO) {
+    public String auth(@RequestBody @Valid LoginRequestDTO loginRequestDTO) throws RegraDeNegocioException {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(
                         loginRequestDTO.getLogin(),
@@ -43,7 +44,9 @@ public class AuthenticationController {
                         usernamePasswordAuthenticationToken);
 
         User usuarioValidado = (User) authentication.getPrincipal();
-
+        if (usuarioValidado.getAtivo().equals("N")) {
+            throw new RegraDeNegocioException("Usuário inativo");
+        }
         return tokenService.generateToken(usuarioValidado);
     }
 

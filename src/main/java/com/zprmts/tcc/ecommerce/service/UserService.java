@@ -13,8 +13,8 @@ public interface UserService {
     User getUserById(Long userId) throws RegraDeNegocioException;
 
     User getUserInfo(String email) throws RegraDeNegocioException;
-    
-    Page<User> getAllUsers(Pageable pageable);
+
+    Page<UserResponse> getAllUsers(Pageable pageable);
 
     UserResponse update(@Nullable Long id, UpdateUserRequest updateUserRequest) throws RegraDeNegocioException;
 
