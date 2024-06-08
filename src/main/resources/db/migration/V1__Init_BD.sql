@@ -62,7 +62,7 @@ CREATE SEQUENCE seq_cargo
 create table USERS
 (
     id                  numeric    not null,
-    active              boolean not null,
+    ativo               varchar(1) not null,
     address             varchar(255),
     city                varchar(255),
     email               varchar(255),

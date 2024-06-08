@@ -17,5 +17,6 @@ public class UpdateUserRequest {
     private String address;
     private String phoneNumber;
     private String postIndex;
+    private String ativo;
     private byte[] foto;
 }

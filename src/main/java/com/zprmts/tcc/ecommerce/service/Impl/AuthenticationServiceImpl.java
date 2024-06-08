@@ -40,7 +40,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new RegraDeNegocioException(EMAIL_IN_USE);
         }
         User user = objectMapper.convertValue(registrationRequestAdmin, User.class);
-        user.setActive(false);
+        user.setAtivo("S");
         Set<CargoEnum> cargoEnumSet = registrationRequestAdmin.getCargos();
         user.setPassword(passwordEncoder.encode(registrationRequestAdmin.getPassword()));
         for (CargoEnum cargoEnum : cargoEnumSet) {
@@ -66,7 +66,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         User user = objectMapper.convertValue(registrationRequest, User.class);
-        user.setActive(false);
+        user.setAtivo("S");
         user.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
 
         CargoEntity cargoEntity = new CargoEntity();

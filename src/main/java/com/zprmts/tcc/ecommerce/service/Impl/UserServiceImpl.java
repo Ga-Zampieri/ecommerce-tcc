@@ -48,8 +48,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> getAllUsers(Pageable pageable) {
-        return userRepository.findAllByOrderByIdAsc(pageable);
+    public Page<UserResponse> getAllUsers(Pageable pageable) {
+        Page<User> users = userRepository.findAllByOrderByIdAsc(pageable);
+
+        return users.map(user -> objectMapper.convertValue(user, UserResponse.class));
+    }
+
+    public void delete(Long id) throws RegraDeNegocioException {
+        User user = getUserById(id);
+        user.setAtivo("N");
+        userRepository.save(user);
     }
 
     @Override
@@ -68,6 +76,7 @@ public class UserServiceImpl implements UserService {
         user.setAddress(updateUserRequest.getAddress());
         user.setPhoneNumber(updateUserRequest.getPhoneNumber());
         user.setPostIndex(updateUserRequest.getPostIndex());
+        user.setAtivo(updateUserRequest.getAtivo());
         userRepository.save(user);
 
         UserResponse userResponse = objectMapper.convertValue(user, UserResponse.class);
@@ -91,7 +100,7 @@ public class UserServiceImpl implements UserService {
         user.setAddress(updateUserRequest.getAddress());
         user.setPhoneNumber(updateUserRequest.getPhoneNumber());
         user.setPostIndex(updateUserRequest.getPostIndex());
-
+        user.setAtivo(updateUserRequest.getAtivo());
         userRepository.save(user);
 
         UserResponse userResponse = objectMapper.convertValue(user, UserResponse.class);
